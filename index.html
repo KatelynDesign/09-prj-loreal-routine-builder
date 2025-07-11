@@ -88,5 +88,13 @@
     <!-- secrets.js can be removed when using Cloudflare Workers for API requests -->
     <script src="secrets.js"></script>
     <script src="script.js"></script>
+    <!-- Cloudflare Worker endpoint for API proxy -->
+    <script>
+      // This is a reference to your Cloudflare Worker endpoint
+      // You can use this URL in your JavaScript fetch calls instead of localhost or direct OpenAI API
+      const OPENAI_PROXY_URL = "https://green-tooth-8f61.cq0232.workers.dev";
+      // For students: you can also use this variable in your JS
+      const workerUrl = "https://morning-term-a84a.cq0232.workers.dev/";
+    </script>
   </body>
 </html>

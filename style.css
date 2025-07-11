@@ -253,3 +253,40 @@ body {
 .generate-btn i {
   margin-right: 8px;
 }
+
+.product-card .toggle-desc-btn {
+  margin-top: 10px;
+  padding: 6px 14px;
+  background: #f0f8ff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #222;
+  transition: background 0.2s;
+}
+
+.product-card .toggle-desc-btn:focus {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+  background: #e0eaff;
+}
+
+.product-card .toggle-desc-btn[aria-expanded="true"] {
+  background: #e0eaff;
+}
+
+.product-card .product-desc {
+  margin-top: 10px;
+  padding: 10px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.product-card .product-desc[hidden] {
+  display: none;
+}
