@@ -26,7 +26,7 @@
       <!-- Category Filter -->
       <div class="search-section">
         <select id="categoryFilter">
-          <option value="" disabled selected>Choose a Category</option>
+          <option value="" disabled selected hidden>Choose a Category</option>
           <option value="cleanser">Cleansers</option>
           <option value="moisturizer">Moisturizers & Treatments</option>
           <option value="haircare">Haircare</option>
@@ -85,16 +85,17 @@
       </footer>
     </div>
 
-    <!-- secrets.js can be removed when using Cloudflare Workers for API requests -->
+    <!-- secrets.js is only needed if you are storing API keys locally. 
+         Remove this line if you use Cloudflare Workers for API requests. -->
     <script src="secrets.js"></script>
     <script src="script.js"></script>
     <!-- Cloudflare Worker endpoint for API proxy -->
     <script>
       // This is a reference to your Cloudflare Worker endpoint
-      // You can use this URL in your JavaScript fetch calls instead of localhost or direct OpenAI API
-      const OPENAI_PROXY_URL = "https://green-tooth-8f61.cq0232.workers.dev";
-      // For students: you can also use this variable in your JS
-      const workerUrl = "https://morning-term-a84a.cq0232.workers.dev/";
+      // Use this URL in your JavaScript fetch calls to access the OpenAI API
+      const OPENAI_PROXY_URL = "https://green-tooth-8f61.cq0232.workers.dev/";
     </script>
+  </body>
+</html>
   </body>
 </html>

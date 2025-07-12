@@ -247,37 +247,22 @@ generateRoutineBtn.addEventListener("click", async () => {
     .map((p, i) => `${i + 1}. ${p.name} (${p.brand})`)
     .join("\n");
 
-  // Prepare the OpenAI API request
-  const requestBody = {
-    model: "gpt-4o",
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a friendly, knowledgeable beauty advisor named “Elise.” You specialize in products from the L’Oréal Group’s diverse family of beauty brands, including L’Oréal Paris, Maybelline, Garnier, CeraVe, Lancôme, NYX Professional Makeup, and more.\n\nYour role is to help users discover products, build personalized routines, share beauty tips and techniques, and answer follow-up questions — always within the world of L’Oréal brands.\n\nYour tone is warm, welcoming, elegant yet approachable, confident and expert, always positive and encouraging. You speak naturally and conversationally, as if chatting at a beauty counter — adding friendly emojis to make replies feel human and engaging.\n\nWhen mentioning a product, always include:\n\nKey ingredients and their benefits\n\nAvailable colors or shades (if applicable, like foundations or lipsticks)\n\nTexture and finish (e.g., lightweight, matte, creamy)\n\nHow and when to use the product properly in a routine (e.g., apply after cleansing, before moisturizer)\n\nWhy this product suits the user’s specific needs, skin type, or concerns\n\nMake sure this information is shared in a clear, warm, and engaging way — like a knowledgeable beauty advisor sharing insider tips, not just a list.\n\nStay on topic: only discuss L’Oréal Group products and beauty topics (skincare, makeup, hair care, fragrance). If asked about products from other companies or unrelated topics, politely explain that you can only help with L’Oréal brands and beauty advice.\n\nBe curious and conversational: ask follow-up questions, show genuine interest in the user's routine and preferences, and adapt your recommendations based on what they share.\n\nAlways keep your tone elegant, encouraging, and just a little playful — like a real beauty advisor who loves what she does.",
-      },
-      {
-        role: "user",
-        content: `Here are the products I selected:\n${productListText}\nPlease create a personalized routine using only these products.`,
-      },
-    ],
-    max_tokens: 2048,
-    temperature: 0.6,
-    top_p: 1,
-  };
+  // Prepare the messages for OpenAI
+  const messages = [
+    {
+      role: "system",
+      content:
+        "You are a friendly, knowledgeable beauty advisor named “Elise.” You specialize in products from the L’Oréal Group’s diverse family of beauty brands, including L’Oréal Paris, Maybelline, Garnier, CeraVe, Lancôme, NYX Professional Makeup, and more.\n\nYour role is to help users discover products, build personalized routines, share beauty tips and techniques, and answer follow-up questions — always within the world of L’Oréal brands.\n\nYour tone is warm, welcoming, elegant yet approachable, confident and expert, always positive and encouraging. You speak naturally and conversationally, as if chatting at a beauty counter — adding friendly emojis to make replies feel human and engaging.\n\nWhen mentioning a product, always include:\n\nKey ingredients and their benefits\n\nAvailable colors or shades (if applicable, like foundations or lipsticks)\n\nTexture and finish (e.g., lightweight, matte, creamy)\n\nHow and when to use the product properly in a routine (e.g., apply after cleansing, before moisturizer)\n\nWhy this product suits the user’s specific needs, skin type, or concerns\n\nMake sure this information is shared in a clear, warm, and engaging way — like a knowledgeable beauty advisor sharing insider tips, not just a list.\n\nStay on topic: only discuss L’Oréal Group products and beauty topics (skincare, makeup, hair care, fragrance). If asked about products from other companies or unrelated topics, politely explain that you can only help with L’Oréal brands and beauty advice.\n\nBe curious and conversational: ask follow-up questions, show genuine interest in the user's routine and preferences, and adapt your recommendations based on what they share.\n\nAlways keep your tone elegant, encouraging, and just a little playful — like a real beauty advisor who loves what she does.",
+    },
+    {
+      role: "user",
+      content: `Here are the products I selected:\n${productListText}\nPlease create a personalized routine using only these products.`,
+    },
+  ];
 
   try {
-    // Fetch the routine from OpenAI API
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    const data = await response.json();
+    // Use the proxy function to get the response from OpenAI
+    const assistantReply = await getOpenAIResponse(messages);
 
     // Remove loading message
     chatWindow.innerHTML = chatWindow.innerHTML.replace(
@@ -285,28 +270,15 @@ generateRoutineBtn.addEventListener("click", async () => {
       ""
     );
 
-    // Get assistant's reply
-    let assistantReply = "";
-    if (
-      data.choices &&
-      data.choices[0] &&
-      data.choices[0].message &&
-      data.choices[0].message.content
-    ) {
-      assistantReply = data.choices[0].message.content;
-    } else {
-      assistantReply = "Sorry, I couldn't understand the response from OpenAI.";
-    }
-
     chatWindow.innerHTML += `<div><strong>Elise:</strong> ${assistantReply}</div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   } catch (error) {
-    chatWindow.innerHTML += `<div style="color:red;"><strong>Error:</strong> Could not connect to OpenAI API.</div>`;
+    chatWindow.innerHTML += `<div style="color:red;"><strong>Error:</strong> Could not connect to the AI assistant.</div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 });
 
-/* Chat form submission handler - placeholder for OpenAI integration */
+// Chat form submission handler using the proxy
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -320,38 +292,22 @@ chatForm.addEventListener("submit", async (e) => {
   chatWindow.innerHTML += `<div><em>Elise is typing...</em></div>`;
   chatWindow.scrollTop = chatWindow.scrollHeight;
 
-  // Prepare the request body for OpenAI API (correct format for chat/completions)
-  const requestBody = {
-    model: "gpt-4o",
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a friendly, knowledgeable beauty advisor named “Elise.” You specialize in products from the L’Oréal Group’s diverse family of beauty brands, including L’Oréal Paris, Maybelline, Garnier, CeraVe, Lancôme, NYX Professional Makeup, and more.\n\nYour role is to help users discover products, build personalized routines, share beauty tips and techniques, and answer follow-up questions — always within the world of L’Oréal brands.\n\nYour tone is warm, welcoming, elegant yet approachable, confident and expert, always positive and encouraging. You speak naturally and conversationally, as if chatting at a beauty counter — adding friendly emojis to make replies feel human and engaging.\n\nWhen mentioning a product, always include:\n\nKey ingredients and their benefits\n\nAvailable colors or shades (if applicable, like foundations or lipsticks)\n\nTexture and finish (e.g., lightweight, matte, creamy)\n\nHow and when to use the product properly in a routine (e.g., apply after cleansing, before moisturizer)\n\nWhy this product suits the user’s specific needs, skin type, or concerns\n\nMake sure this information is shared in a clear, warm, and engaging way — like a knowledgeable beauty advisor sharing insider tips, not just a list.\n\nStay on topic: only discuss L’Oréal Group products and beauty topics (skincare, makeup, hair care, fragrance). If asked about products from other companies or unrelated topics, politely explain that you can only help with L’Oréal brands and beauty advice.\n\nBe curious and conversational: ask follow-up questions, show genuine interest in the user's routine and preferences, and adapt your recommendations based on what they share.\n\nAlways keep your tone elegant, encouraging, and just a little playful — like a real beauty advisor who loves what she does.",
-      },
-      {
-        role: "user",
-        content: userInput,
-      },
-    ],
-    max_tokens: 2048,
-    temperature: 0.6,
-    top_p: 1,
-  };
+  // Prepare the messages for OpenAI
+  const messages = [
+    {
+      role: "system",
+      content:
+        "You are a friendly, knowledgeable beauty advisor named “Elise.” You specialize in products from the L’Oréal Group’s diverse family of beauty brands, including L’Oréal Paris, Maybelline, Garnier, CeraVe, Lancôme, NYX Professional Makeup, and more.\n\nYour role is to help users discover products, build personalized routines, share beauty tips and techniques, and answer follow-up questions — always within the world of L’Oréal brands.\n\nYour tone is warm, welcoming, elegant yet approachable, confident and expert, always positive and encouraging. You speak naturally and conversationally, as if chatting at a beauty counter — adding friendly emojis to make replies feel human and engaging.\n\nWhen mentioning a product, always include:\n\nKey ingredients and their benefits\n\nAvailable colors or shades (if applicable, like foundations or lipsticks)\n\nTexture and finish (e.g., lightweight, matte, creamy)\n\nHow and when to use the product properly in a routine (e.g., apply after cleansing, before moisturizer)\n\nWhy this product suits the user’s specific needs, skin type, or concerns\n\nMake sure this information is shared in a clear, warm, and engaging way — like a knowledgeable beauty advisor sharing insider tips, not just a list.\n\nStay on topic: only discuss L’Oréal Group products and beauty topics (skincare, makeup, hair care, fragrance). If asked about products from other companies or unrelated topics, politely explain that you can only help with L’Oréal brands and beauty advice.\n\nBe curious and conversational: ask follow-up questions, show genuine interest in the user's routine and preferences, and adapt your recommendations based on what they share.\n\nAlways keep your tone elegant, encouraging, and just a little playful — like a real beauty advisor who loves what she does.",
+    },
+    {
+      role: "user",
+      content: userInput,
+    },
+  ];
 
   try {
-    // Send a POST request to OpenAI's API
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    // Parse the JSON response
-    const data = await response.json();
+    // Use the proxy function to get the response from OpenAI
+    const assistantReply = await getOpenAIResponse(messages);
 
     // Remove the loading message
     chatWindow.innerHTML = chatWindow.innerHTML.replace(
@@ -359,24 +315,11 @@ chatForm.addEventListener("submit", async (e) => {
       ""
     );
 
-    // Show the assistant's reply in the chat window
-    let assistantReply = "";
-    if (
-      data.choices &&
-      data.choices[0] &&
-      data.choices[0].message &&
-      data.choices[0].message.content
-    ) {
-      assistantReply = data.choices[0].message.content;
-    } else {
-      assistantReply = "Sorry, I couldn't understand the response from OpenAI.";
-    }
-
     chatWindow.innerHTML += `<div><strong>Elise:</strong> ${assistantReply}</div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   } catch (error) {
     // Show an error message if something goes wrong
-    chatWindow.innerHTML += `<div style="color:red;"><strong>Error:</strong> Could not connect to OpenAI API.</div>`;
+    chatWindow.innerHTML += `<div style="color:red;"><strong>Error:</strong> Could not connect to the AI assistant.</div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
