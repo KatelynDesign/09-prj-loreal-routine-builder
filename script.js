@@ -286,36 +286,48 @@ async function getOpenAIResponse(messages) {
 // Handle "Generate Routine" button click
 generateRoutineBtn.addEventListener("click", async () => {
   if (selectedProducts.length === 0) {
-    chatWindow.innerHTML += `<div><em>Please select at least one product to generate a routine.</em></div>`;
+    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 16px;"><em>Please select at least one product to generate a routine.</em></div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
     return;
   }
-
-  chatWindow.innerHTML += `<div><em>Elise is creating your personalized routine...</em></div>`;
-  chatWindow.scrollTop = chatWindow.scrollHeight;
 
   let productListText = selectedProducts
     .map((p, i) => `${i + 1}. ${p.name} (${p.brand})`)
     .join("\n");
 
   // Add the user's message to the conversation history
+  const userMsg = `Here are the products I selected:\n${productListText}\nPlease create a personalized routine using only these products.`;
   conversationHistory.push({
     role: "user",
-    content: `Here are the products I selected:\n${productListText}\nPlease create a personalized routine using only these products.`,
+    content: userMsg,
   });
 
+  // Show user message and "Elise is typing..." below it, as chat bubbles
+  chatWindow.innerHTML += `
+    <div class="chat-bubble user"><strong>You:</strong><br>${userMsg.replace(/\n/g, "<br>")}</div>
+    <div class="chat-bubble typing elise-typing"><em>Elise is typing...</em></div>
+  `;
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
   try {
-    // Send the full conversation history to OpenAI
+    // Wait a couple of seconds before showing Elise's reply
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Get Elise's reply
     const reply = await getOpenAIResponse(conversationHistory);
-    // Add the assistant's reply to the conversation history
     conversationHistory.push({
       role: "assistant",
       content: reply,
     });
-    chatWindow.innerHTML += `<div><strong>Elise:</strong> ${reply}</div>`;
+    // Remove the "Elise is typing..." message
+    const typingDiv = chatWindow.querySelector(".elise-typing");
+    if (typingDiv) typingDiv.remove();
+    // Show Elise's reply as a chat bubble
+    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 24px;"><strong>Elise:</strong><br>${reply}</div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   } catch (error) {
-    chatWindow.innerHTML += `<div><em>Sorry, something went wrong.</em></div>`;
+    const typingDiv = chatWindow.querySelector(".elise-typing");
+    if (typingDiv) typingDiv.remove();
+    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 16px;"><em>Sorry, something went wrong.</em></div>`;
   }
 });
 
@@ -324,9 +336,6 @@ chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const userInput = document.getElementById("userInput").value;
-  chatWindow.innerHTML += `<div><strong>You:</strong> ${userInput}</div>`;
-  chatWindow.innerHTML += `<div><em>Elise is typing...</em></div>`;
-  chatWindow.scrollTop = chatWindow.scrollHeight;
 
   // Add the user's message to the conversation history
   conversationHistory.push({
@@ -334,18 +343,32 @@ chatForm.addEventListener("submit", async (e) => {
     content: userInput,
   });
 
+  // Show user message and "Elise is typing..." below it, as chat bubbles
+  chatWindow.innerHTML += `
+    <div class="chat-bubble user"><strong>You:</strong><br>${userInput}</div>
+    <div class="chat-bubble typing elise-typing"><em>Elise is typing...</em></div>
+  `;
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
   try {
-    // Send the full conversation history to OpenAI
+    // Wait a couple of seconds before showing Elise's reply
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Get Elise's reply
     const reply = await getOpenAIResponse(conversationHistory);
-    // Add the assistant's reply to the conversation history
     conversationHistory.push({
       role: "assistant",
       content: reply,
     });
-    chatWindow.innerHTML += `<div><strong>Elise:</strong> ${reply}</div>`;
+    // Remove the "Elise is typing..." message
+    const typingDiv = chatWindow.querySelector(".elise-typing");
+    if (typingDiv) typingDiv.remove();
+    // Show Elise's reply as a chat bubble
+    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 24px;"><strong>Elise:</strong><br>${reply}</div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   } catch (error) {
-    chatWindow.innerHTML += `<div><em>Sorry, something went wrong.</em></div>`;
+    const typingDiv = chatWindow.querySelector(".elise-typing");
+    if (typingDiv) typingDiv.remove();
+    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 16px;"><em>Sorry, something went wrong.</em></div>`;
   }
 
   document.getElementById("userInput").value = "";
