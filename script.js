@@ -109,7 +109,8 @@ function filterAndDisplayProducts() {
       (product) =>
         product.name.toLowerCase().includes(searchTerm) ||
         product.brand.toLowerCase().includes(searchTerm) ||
-        (product.description && product.description.toLowerCase().includes(searchTerm))
+        (product.description &&
+          product.description.toLowerCase().includes(searchTerm))
     );
   }
 
@@ -242,13 +243,20 @@ loadSelectedProductsFromStorage();
 renderSelectedProducts();
 updateProductCardHighlights();
 
+// Use this system message for the chat AI
+const systemMessage = `
+You are Elise, a beauty advisor. When you mention products or resources, always include clickable URLs. Format links as HTML anchor tags, like: <a href="URL" target="_blank" rel="noopener noreferrer">link text</a>.
+Provide helpful, direct links so users can easily access more information or buy products.
+
+Your tone is warm and professional, and you sign off with "— Elise 💄".
+`;
+
 // --- Conversation history for chat (so the AI remembers the conversation) ---
 let conversationHistory = [
   {
     role: "system",
-    content:
-      "You are a friendly, knowledgeable beauty advisor named “Elise.” You specialize in products from the L’Oréal Group’s diverse family of beauty brands, including L’Oréal Paris, Maybelline, Garnier, CeraVe, Lancôme, NYX Professional Makeup, and more.\n\nYour role is to help users discover products, build personalized routines, share beauty tips and techniques, and answer follow-up questions — always within the world of L’Oréal brands.\n\nYour tone is warm, welcoming, elegant yet approachable, confident and expert, always positive and encouraging. You speak naturally and conversationally, as if chatting at a beauty counter — adding friendly emojis to make replies feel human and engaging.\n\nWhen mentioning a product, always include:\n\nKey ingredients and their benefits\n\nAvailable colors or shades (if applicable, like foundations or lipsticks)\n\nTexture and finish (e.g., lightweight, matte, creamy)\n\nHow and when to use the product properly in a routine (e.g., apply after cleansing, before moisturizer)\n\nWhy this product suits the user’s specific needs, skin type, or concerns\n\nMake sure this information is shared in a clear, warm, and engaging way — like a knowledgeable beauty advisor sharing insider tips, not just a list.\n\nStay on topic: only discuss L’Oréal Group products and beauty topics (skincare, makeup, hair care, fragrance). If asked about products from other companies or unrelated topics, politely explain that you can only help with L’Oréal brands and beauty advice.\n\nBe curious and conversational: ask follow-up questions, show genuine interest in the user's routine and preferences, and adapt your recommendations based on what they share.\n\nAlways keep your tone elegant, encouraging, and just a little playful — like a real beauty advisor who loves what she does.",
-  }
+    content: systemMessage,
+  },
 ];
 
 // Example function to call OpenAI via the proxy
@@ -283,6 +291,43 @@ async function getOpenAIResponse(messages) {
     : "Sorry, I couldn't get a response.";
 }
 
+// Escape special regex characters
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Converts product names in a text to clickable links based on the loaded product list.
+ * Ensures each product name is only linked once per call to avoid repeats.
+ *
+ * @param {string} text - The AI response text to linkify.
+ * @param {Array} products - Array of product objects with at least 'name' and 'url'.
+ * @returns {string} - The text with product names replaced by clickable links.
+ */
+function linkifyProductsInText(text, products) {
+  if (!products || products.length === 0) return text;
+
+  const linkedProducts = new Set();
+
+  products.forEach((product) => {
+    if (!product.name) return;
+    const url = product.url || "https://www.lorealparisusa.com/";
+    // Only link the first occurrence of each product name
+    if (!linkedProducts.has(product.name.toLowerCase())) {
+      const regex = new RegExp(`\\b${escapeRegExp(product.name)}\\b`, "i");
+      let replaced = false;
+      text = text.replace(regex, (match) => {
+        if (replaced) return match;
+        replaced = true;
+        linkedProducts.add(product.name.toLowerCase());
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${match}</a>`;
+      });
+    }
+  });
+
+  return text;
+}
+
 // Handle "Generate Routine" button click
 generateRoutineBtn.addEventListener("click", async () => {
   if (selectedProducts.length === 0) {
@@ -302,27 +347,30 @@ generateRoutineBtn.addEventListener("click", async () => {
     content: userMsg,
   });
 
-  // Show user message and "Elise is typing..." below it, as chat bubbles
   chatWindow.innerHTML += `
-    <div class="chat-bubble user"><strong>You:</strong><br>${userMsg.replace(/\n/g, "<br>")}</div>
+    <div class="chat-bubble user"><strong>You:</strong><br>${userMsg.replace(
+      /\n/g,
+      "<br>"
+    )}</div>
     <div class="chat-bubble typing elise-typing"><em>Elise is typing...</em></div>
   `;
   chatWindow.scrollTop = chatWindow.scrollHeight;
 
   try {
-    // Wait a couple of seconds before showing Elise's reply
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    // Get Elise's reply
-    const reply = await getOpenAIResponse(conversationHistory);
+    let reply = await getOpenAIResponse(conversationHistory);
+    // Linkify product names in reply
+    reply = linkifyProductsInText(reply, allProducts);
     conversationHistory.push({
       role: "assistant",
       content: reply,
     });
-    // Remove the "Elise is typing..." message
     const typingDiv = chatWindow.querySelector(".elise-typing");
     if (typingDiv) typingDiv.remove();
-    // Show Elise's reply as a chat bubble
-    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 24px;"><strong>Elise:</strong><br>${reply}</div>`;
+    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 24px;"><strong>Elise:</strong><br>${reply.replace(
+      /\n/g,
+      "<br>"
+    )}</div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   } catch (error) {
     const typingDiv = chatWindow.querySelector(".elise-typing");
@@ -337,13 +385,11 @@ chatForm.addEventListener("submit", async (e) => {
 
   const userInput = document.getElementById("userInput").value;
 
-  // Add the user's message to the conversation history
   conversationHistory.push({
     role: "user",
     content: userInput,
   });
 
-  // Show user message and "Elise is typing..." below it, as chat bubbles
   chatWindow.innerHTML += `
     <div class="chat-bubble user"><strong>You:</strong><br>${userInput}</div>
     <div class="chat-bubble typing elise-typing"><em>Elise is typing...</em></div>
@@ -351,19 +397,20 @@ chatForm.addEventListener("submit", async (e) => {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 
   try {
-    // Wait a couple of seconds before showing Elise's reply
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    // Get Elise's reply
-    const reply = await getOpenAIResponse(conversationHistory);
+    let reply = await getOpenAIResponse(conversationHistory);
+    // Linkify product names in reply
+    reply = linkifyProductsInText(reply, allProducts);
     conversationHistory.push({
       role: "assistant",
       content: reply,
     });
-    // Remove the "Elise is typing..." message
     const typingDiv = chatWindow.querySelector(".elise-typing");
     if (typingDiv) typingDiv.remove();
-    // Show Elise's reply as a chat bubble
-    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 24px;"><strong>Elise:</strong><br>${reply}</div>`;
+    chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 24px;"><strong>Elise:</strong><br>${reply.replace(
+      /\n/g,
+      "<br>"
+    )}</div>`;
     chatWindow.scrollTop = chatWindow.scrollHeight;
   } catch (error) {
     const typingDiv = chatWindow.querySelector(".elise-typing");
@@ -373,3 +420,28 @@ chatForm.addEventListener("submit", async (e) => {
 
   document.getElementById("userInput").value = "";
 });
+
+// New function to add chat bubbles
+function addChatBubble(role, text, isTyping = false) {
+  const bubble = document.createElement("div");
+  bubble.className = `chat-bubble ${role}`;
+  if (isTyping) {
+    bubble.classList.add("typing");
+    bubble.textContent = text;
+  } else {
+    if (role === "elise") {
+      // Render links & formatting as HTML for Elise, preserve line breaks
+      bubble.innerHTML = text.replace(/\n/g, "<br>");
+    } else {
+      // For user, escape HTML to prevent injection
+      bubble.textContent = text;
+    }
+  }
+  chatWindow.appendChild(bubble);
+  scrollChatToBottom();
+}
+
+// Helper function to scroll chat window to the bottom
+function scrollChatToBottom() {
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
