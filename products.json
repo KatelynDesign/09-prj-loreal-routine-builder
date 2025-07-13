@@ -49,7 +49,7 @@
       "id": 6,
       "brand": "CeraVe",
       "name": "Resurfacing Retinol Serum",
-      "category": "skincare",
+      "category": "serum",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Resurfacing_Retinol_Serum.png",
       "description": "Lightweight retinol gel serum to smooth texture and fade post-acne marks. Encapsulated retinol boosts cell turnover; licorice extract brightens; ceramides restore the barrier; niacinamide calms. Fast-absorbing, fragrance-free, non-comedogenic; refines pores and scars over time.",
       "url": "https://www.cerave.com/skincare/serums/resurfacing-retinol-serum"
@@ -58,7 +58,7 @@
       "id": 7,
       "brand": "CeraVe",
       "name": "Skin Renewing Vitamin C Serum",
-      "category": "skincare",
+      "category": "serum",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Skin_Renewing_Vitamin_C_Serum.png",
       "description": "Brightening serum with 10% vitamin C and ceramide complex to boost radiance and even tone. Hyaluronic acid plumps, vitamin B5 soothes. Improves clarity and fine lines for a luminous complexion. Fragrance-free and gentle for daily use.",
       "url": "https://www.cerave.com/skincare/serums/skin-renewing-vitamin-c-serum"
@@ -67,7 +67,7 @@
       "id": 8,
       "brand": "CeraVe",
       "name": "Eye Repair Cream",
-      "category": "skincare",
+      "category": "eye cream",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Eye_Repair_Cream.png",
       "description": "Nourishing eye cream to reduce dark circles and puffiness. Marine & Botanical Complex brightens; hyaluronic acid and ceramides hydrate; niacinamide soothes. Fast-absorbing, non-greasy, hypoallergenic, and ophthalmologist-tested; smooths and refreshes the eye area.",
       "url": "https://www.cerave.com/skincare/moisturizers/eye-repair-cream"
@@ -94,7 +94,7 @@
       "id": 11,
       "brand": "La Roche-Posay",
       "name": "Anthelios Ultra-Light Fluid Face Sunscreen SPF 60",
-      "category": "skincare",
+      "category": "sunscreen",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/La-Roche-Posay-Anthelios-Ultra-Light-Fluid-Face-Sunscreen-SPF-60.jpg",
       "description": "Ultra-light SPF 60 fluid with Cell-Ox Shield® and antioxidants. Fast-absorbing, non-greasy, invisible finish; works under makeup. Water-resistant for 40 minutes; oil- and fragrance-free. Suitable for sensitive and oily skin without a white cast.",
       "url": "https://www.laroche-posay.us/search?q=Anthelios+Ultra-Light+Fluid+Face+Sunscreen+SPF+60&lang="
@@ -103,7 +103,7 @@
       "id": 12,
       "brand": "La Roche-Posay",
       "name": "Effaclar Duo Dual Acne Treatment",
-      "category": "skincare",
+      "category": "treatment",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/La-Roche-Posay-Effaclar-Duo-Dual-Acne-Treatment.jpg",
       "description": "Acne treatment with 5.5% benzoyl peroxide and lipo-hydroxy acid. Spot or full-face lotion clears breakouts, prevents blemishes, and refines texture. Niacinamide soothes; oil-free, fast-absorbing; reduces acne and marks without over-drying.",
       "url": "https://www.laroche-posay.us/search?q=Effaclar+Duo+Dual+Acne+Treatment&lang="
@@ -112,7 +112,7 @@
       "id": 13,
       "brand": "Vichy",
       "name": "Minéral 89 Hyaluronic Acid Booster",
-      "category": "skincare",
+      "category": "serum",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Vichy_Minéral_89_Hyaluronic_Acid_Booster.png",
       "description": "Lightweight gel booster with 89% volcanic mineral water and hyaluronic acid. Strengthens the barrier, provides plumping hydration with 15 minerals. Quick-absorbing, non-sticky; alcohol- and fragrance-free. Leaves skin fresh, soothed, and deeply hydrated.",
       "url": "https://www.vichyusa.com/skin-care/mineral-89-hyaluronic-acid-serum-3337875543248.html"
@@ -130,7 +130,7 @@
       "id": 15,
       "brand": "L'Oréal Paris",
       "name": "Revitalift 1.5% Hyaluronic Acid Serum",
-      "category": "skincare",
+      "category": "serum",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Loreal_Paris_Revitalift_1.5%_Hyaluronic_Acid_Serum.png",
       "description": "Lightweight serum with 1.5% hyaluronic acid (macro and micro) and vitamin C for multi-depth hydration. Instantly replenishes moisture, visibly plumps, and reduces fine lines. Fragrance-free, non-tacky; skin feels smoother and more youthful over time. Suitable for sensitive skin.",
       "url": "https://www.lorealparisusa.com/skin-care/face-serums/revitalift-derm-intensives-pure-hyaluronic-acid-serum"
@@ -211,7 +211,7 @@
       "id": 24,
       "brand": "Garnier",
       "name": "Fructis Sleek & Shine Shampoo",
-      "category": "haircare",
+      "category": "shampoo",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Garnier-Fructis-Sleek-&-Shine-Shampoo.jpg",
       "description": "Smoothing shampoo that tames frizz for up to 72 hours in humidity. Infused with argan oil and plant-based keratin protein to nourish and strengthen. Creamy lather cleanses while coating strands to seal cuticles. Leaves hair silky, shiny, and flyaway-free; use with conditioner for best results.",
       "url": "https://www.garnierusa.com/about-our-brands/fructis/sleek-and-shine/sleek-shine-shampoo"
@@ -229,7 +229,7 @@
       "id": 26,
       "brand": "Kérastase",
       "name": "Nutritive Bain Satin 1 Shampoo",
-      "category": "haircare",
+      "category": "shampoo",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Kerastase-Nutritive-Bain-Satin-1-Shampoo.jpg",
       "description": "Nourishing shampoo for normal to slightly dry hair with plant proteins and niacinamide. Irisome Complex infuses strands with glucose and lipids for softness and shine. Gently cleanses while protecting with antioxidant-rich iris rhizome extract. Leaves hair supple, detangled, and radiant.",
       "url": "https://www.kerastase-usa.com/collections/nutritive/bain-satin-riche-shampoo.html"
@@ -265,7 +265,7 @@
       "id": 30,
       "brand": "Redken",
       "name": "All Soft Conditioner",
-      "category": "haircare",
+      "category": "conditioner",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Redken_All_Soft_Conditioner.png",
       "description": "Moisturizing conditioner with Moisture Complex and argan oil to detangle and soften hair. Smooths cuticles, reduces frizz, and boosts shine without weighing down strands. When used with the All Soft Shampoo, provides up to 15× more conditioning. Leaves hair silky, manageable, and healthy-looking.",
       "url": "https://www.redken.com/hair-care/all-soft-conditioner.html"

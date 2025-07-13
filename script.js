@@ -445,3 +445,13 @@ function addChatBubble(role, text, isTyping = false) {
 function scrollChatToBottom() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
+
+// This code runs after the page loads
+window.addEventListener('DOMContentLoaded', () => {
+  // Select the image element by its id
+  const serumImg = document.getElementById('revitalift-serum-img');
+  // If the element exists, set its src to the correct image file
+  if (serumImg) {
+    serumImg.src = 'img/Revitalift 1.5% Hyaluronic Acid Serum.png';
+  }
+});
