@@ -22,7 +22,7 @@ async function loadProducts() {
   return data.products;
 }
 
-/* Create HTML for displaying product cards, with a toggle for description */
+/* Create HTML for displaying product cards, with description overlay on hover */
 function displayProducts(products) {
   productsContainer.innerHTML = products
     .map(
@@ -32,10 +32,7 @@ function displayProducts(products) {
       <div class="product-info">
         <h3>${product.name}</h3>
         <p>${product.brand}</p>
-        <button class="toggle-desc-btn" aria-expanded="false" aria-controls="desc-${idx}" tabindex="0">
-          Show Details
-        </button>
-        <div class="product-desc" id="desc-${idx}" hidden>
+        <div class="product-desc" id="desc-${idx}">
           ${
             product.description
               ? product.description
@@ -47,21 +44,7 @@ function displayProducts(products) {
   `
     )
     .join("");
-
-  // Add event listeners to all "Show Details" buttons
-  const toggleBtns = productsContainer.querySelectorAll(".toggle-desc-btn");
-  toggleBtns.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      // Find the associated description div
-      const card = btn.closest(".product-card");
-      const desc = card.querySelector(".product-desc");
-      const expanded = btn.getAttribute("aria-expanded") === "true";
-      // Toggle visibility and aria attributes
-      desc.hidden = expanded;
-      btn.setAttribute("aria-expanded", String(!expanded));
-      btn.textContent = expanded ? "Show Details" : "Hide Details";
-    });
-  });
+  // No toggle button or event listeners needed
 }
 
 /* Filter and display products when category changes */
@@ -170,30 +153,33 @@ function saveSelectedProductsToStorage() {
 
 // Add click event to product cards to select/deselect products, update visual state, and update selected list
 productsContainer.addEventListener("click", (e) => {
+  // Find the closest product card element
   const card = e.target.closest(".product-card");
   if (!card) return;
 
-  // Prevent toggle button click from selecting the card
-  if (e.target.classList.contains("toggle-desc-btn")) return;
-
+  // Get the index of the clicked product card
   const idx = card.getAttribute("data-index");
   const filtered = getCurrentlyDisplayedProducts();
   const product = filtered[idx];
 
   // Check if this product is already selected
-  const index = selectedProducts.findIndex(
+  const selectedIdx = selectedProducts.findIndex(
     (p) => p.name === product.name && p.brand === product.brand
   );
 
-  if (index === -1) {
-    // Not selected: add to selectedProducts
-    selectedProducts.push({ name: product.name, brand: product.brand });
+  if (selectedIdx !== -1) {
+    // If already selected, remove it from the selectedProducts array
+    selectedProducts.splice(selectedIdx, 1);
   } else {
-    // Already selected: remove from selectedProducts
-    selectedProducts.splice(index, 1);
+    // If not selected, add it to the selectedProducts array
+    selectedProducts.push({ name: product.name, brand: product.brand });
   }
+
+  // Save the updated selected products to localStorage
   saveSelectedProductsToStorage();
+  // Update the selected products list in the UI
   renderSelectedProducts();
+  // Update the visual highlight on product cards
   updateProductCardHighlights();
 });
 
@@ -489,6 +475,9 @@ function addChatBubble(role, text, isTyping = false) {
 }
 
 // Helper function to scroll chat window to the bottom
+function scrollChatToBottom() {
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
 function scrollChatToBottom() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
