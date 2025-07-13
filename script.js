@@ -11,7 +11,7 @@ const selectedProductsList = document.getElementById("selectedProductsList");
 /* Show initial placeholder until user selects a category */
 productsContainer.innerHTML = `
   <div class="placeholder-message">
-    Select a category to view products
+    First, select a category. Then click a product to add it to your routine.
   </div>
 `;
 
@@ -90,7 +90,7 @@ function filterAndDisplayProducts() {
   if (!selectedCategory && !searchTerm) {
     productsContainer.innerHTML = `
       <div class="placeholder-message">
-        Select a category to view products
+        First, select a category. Then click a product to add it to your routine.
       </div>
     `;
     return;

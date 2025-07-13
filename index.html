@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="L'Oréal Smart Routine & Product Advisor helps you build your personalized beauty routine and discover the best products." />
     <title>L'Oréal | Smart Routine &amp; Product Advisor</title>
+    <link rel="icon" href="img/loreal-logo.png" type="image/png" />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap"
       rel="stylesheet"
@@ -11,6 +13,7 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      crossorigin="anonymous"
     />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -23,87 +26,88 @@
         <h1 class="site-title">Smart Routine &amp; Product Advisor</h1>
       </header>
 
-      <!-- Category Filter -->
-      <div class="search-section">
-        <input
-          type="text"
-          id="productSearch"
-          placeholder="Search products by name or keyword..."
-          class="search-input"
-        />
-
-        <select id="categoryFilter" class="category-select">
-          <option value="" selected disabled hidden>Choose a Category</option>
-          <option value="cleanser">Cleansers</option>
-          <option value="moisturizer">Moisturizers & Treatments</option>
-          <option value="serum">Serums</option>
-          <option value="eye cream">Eye Creams</option>
-          <option value="sunscreen">Sunscreens</option>
-          <option value="treatment">Treatments</option>
-          <option value="skincare">Other Skincare</option>
-          <option value="haircare">Haircare</option>
-          <option value="shampoo">Shampoo</option>
-          <option value="conditioner">Conditioner</option>
-          <option value="makeup">Makeup</option>
-          <option value="hair color">Hair Color</option>
-          <option value="hair styling">Hair Styling</option>
-          <option value="men's grooming">Men's Grooming</option>
-          <option value="suncare">Suncare</option>
-          <option value="fragrance">Fragrance</option>
-        </select>
-      </div>
-
-      <!-- Products Grid -->
-      <div id="productsContainer" class="products-grid">
-        <!-- Products will be inserted here by JavaScript -->
-      </div>
-
-      <!-- Selected Products -->
-      <div class="selected-products">
-        <h2>Selected Products</h2>
-        <div id="selectedProductsList"></div>
-        <button id="generateRoutine" class="generate-btn">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Routine
-        </button>
-      </div>
-
-      <!------- Chat Area ------->
-      <section class="chatbox">
-        <h2>Let's Build Your Routine</h2>
-        <div id="chatWindow" class="chat-window"></div>
-
-        <form id="chatForm" class="chat-form">
-          <label for="userInput" class="visually-hidden">Message</label>
+      <main>
+        <!-- Category Filter -->
+        <div class="search-section">
           <input
-            id="userInput"
-            name="userInput"
             type="text"
-            placeholder="Ask me about products or routines…"
-            autocomplete="off"
-            required
+            id="productSearch"
+            placeholder="Search products by name or keyword..."
+            class="search-input"
+            aria-label="Search products"
           />
-          <button type="submit" id="sendBtn">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span class="visually-hidden">Send</span>
+
+          <select id="categoryFilter" class="category-select" aria-label="Choose a Category">
+            <option value="" selected disabled hidden>Choose a Category</option>
+            <option value="cleanser">Cleansers</option>
+            <option value="moisturizer">Moisturizers & Treatments</option>
+            <option value="serum">Serums</option>
+            <option value="eye cream">Eye Creams</option>
+            <option value="sunscreen">Sunscreens</option>
+            <option value="treatment">Treatments</option>
+            <option value="skincare">Other Skincare</option>
+            <option value="haircare">Haircare</option>
+            <option value="shampoo">Shampoo</option>
+            <option value="conditioner">Conditioner</option>
+            <option value="makeup">Makeup</option>
+            <option value="hair color">Hair Color</option>
+            <option value="hair styling">Hair Styling</option>
+            <option value="men's grooming">Men's Grooming</option>
+            <option value="suncare">Suncare</option>
+            <option value="fragrance">Fragrance</option>
+          </select>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsContainer" class="products-grid">
+          <!-- Products will be inserted here by JavaScript -->
+        </div>
+
+        <!-- Selected Products -->
+        <section class="selected-products" aria-label="Selected Products">
+          <h2>Selected Products</h2>
+          <div id="selectedProductsList"></div>
+          <button id="generateRoutine" class="generate-btn" aria-label="Generate Routine">
+            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Generate Routine
           </button>
-        </form>
-      </section>
+        </section>
+
+        <!------- Chat Area ------->
+        <section class="chatbox" aria-label="Chat with Elise">
+          <h2>Let's Build Your Routine</h2>
+          <div id="chatWindow" class="chat-window" aria-live="polite"></div>
+
+          <form id="chatForm" class="chat-form" autocomplete="off">
+            <label for="userInput" class="visually-hidden">Message</label>
+            <input
+              id="userInput"
+              name="userInput"
+              type="text"
+              placeholder="Ask me about products or routines…"
+              autocomplete="off"
+              required
+              aria-label="Type your message"
+            />
+            <button type="submit" id="sendBtn" aria-label="Send message">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              <span class="visually-hidden">Send</span>
+            </button>
+          </form>
+        </section>
+      </main>
 
       <!------- Footer Links ------->
       <footer class="site-footer">
         <p>&copy; 2025 L'Oréal. All rights reserved.</p>
         <nav>
-          <!-- These URLs are placeholders -->
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Contact</a>
+          <a href="#" rel="noopener noreferrer">Privacy Policy</a>
+          <a href="#" rel="noopener noreferrer">Terms of Use</a>
+          <a href="#" rel="noopener noreferrer">Contact</a>
         </nav>
       </footer>
     </div>
 
-    <!-- secrets.js is only needed if you are storing API keys locally. 
-         Remove this line if you use Cloudflare Workers for API requests. -->
-    <script src="secrets.js"></script>
+    <!-- <script src="secrets.js"></script> -->
     <script src="script.js"></script>
     <!-- Cloudflare Worker endpoint for API proxy -->
     <script>
