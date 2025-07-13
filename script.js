@@ -78,23 +78,40 @@ categoryFilter.addEventListener("change", async (e) => {
   displayProducts(filteredProducts);
 });
 
-// --- Product search field logic ---
-const productSearch = document.getElementById("productSearch");
-
 // Store all products for filtering
 let allProducts = [];
 
 // Load all products on page load for searching/filtering
 async function initProducts() {
   allProducts = await loadProducts();
+  // Do NOT display all products by default
+  // Only show placeholder until a category or search is used
 }
+initProducts();
 
-// Filter products by category and search term
+// --- Product search field logic ---
+const productSearch = document.getElementById("productSearch");
+
+/**
+ * Filters products based on selected category and search term.
+ * Shows only products that match both filters.
+ * This function runs every time the user types or changes the category.
+ */
 function filterAndDisplayProducts() {
   const selectedCategory = categoryFilter.value;
   const searchTerm = productSearch.value.trim().toLowerCase();
 
   let filtered = allProducts;
+
+  // If no category and no search, show placeholder and return
+  if (!selectedCategory && !searchTerm) {
+    productsContainer.innerHTML = `
+      <div class="placeholder-message">
+        Select a category to view products
+      </div>
+    `;
+    return;
+  }
 
   // Filter by category if selected
   if (selectedCategory) {
@@ -114,17 +131,24 @@ function filterAndDisplayProducts() {
     );
   }
 
-  displayProducts(filtered);
+  // Show placeholder if no products match
+  if (filtered.length === 0) {
+    productsContainer.innerHTML = `
+      <div class="placeholder-message">
+        No products found. Try a different search or category.
+      </div>
+    `;
+  } else {
+    displayProducts(filtered);
+    updateProductCardHighlights();
+  }
 }
 
 // Listen for changes on category filter and search input
 categoryFilter.addEventListener("change", filterAndDisplayProducts);
 productSearch.addEventListener("input", filterAndDisplayProducts);
 
-// Initialize products on page load
-initProducts();
-
-// Array to store selected products
+// --- Product card selection logic ---
 let selectedProducts = [];
 
 // Load selected products from localStorage if available
@@ -146,22 +170,24 @@ function saveSelectedProductsToStorage() {
 
 // Add click event to product cards to select/deselect products, update visual state, and update selected list
 productsContainer.addEventListener("click", (e) => {
-  // Find the closest product card element
   const card = e.target.closest(".product-card");
   if (!card) return;
 
-  // Get product name and brand from the card
-  const name = card.querySelector("h3").textContent;
-  const brand = card.querySelector("p").textContent;
+  // Prevent toggle button click from selecting the card
+  if (e.target.classList.contains("toggle-desc-btn")) return;
+
+  const idx = card.getAttribute("data-index");
+  const filtered = getCurrentlyDisplayedProducts();
+  const product = filtered[idx];
 
   // Check if this product is already selected
   const index = selectedProducts.findIndex(
-    (p) => p.name === name && p.brand === brand
+    (p) => p.name === product.name && p.brand === product.brand
   );
 
   if (index === -1) {
-    // Not selected: add to selectedProducts and highlight card
-    selectedProducts.push({ name, brand });
+    // Not selected: add to selectedProducts
+    selectedProducts.push({ name: product.name, brand: product.brand });
   } else {
     // Already selected: remove from selectedProducts
     selectedProducts.splice(index, 1);
@@ -171,15 +197,36 @@ productsContainer.addEventListener("click", (e) => {
   updateProductCardHighlights();
 });
 
+// Helper to get currently displayed products (for correct selection in filtered view)
+function getCurrentlyDisplayedProducts() {
+  const selectedCategory = categoryFilter.value;
+  const searchTerm = productSearch.value.trim().toLowerCase();
+  let filtered = allProducts;
+  if (selectedCategory) {
+    filtered = filtered.filter(
+      (product) => product.category === selectedCategory
+    );
+  }
+  if (searchTerm) {
+    filtered = filtered.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.brand.toLowerCase().includes(searchTerm) ||
+        (product.description &&
+          product.description.toLowerCase().includes(searchTerm))
+    );
+  }
+  return filtered;
+}
+
 // Helper function to update product card highlights based on selection
 function updateProductCardHighlights() {
-  // Get all product cards
   const cards = productsContainer.querySelectorAll(".product-card");
-  cards.forEach((card) => {
-    const name = card.querySelector("h3").textContent;
-    const brand = card.querySelector("p").textContent;
+  const filtered = getCurrentlyDisplayedProducts();
+  cards.forEach((card, idx) => {
+    const product = filtered[idx];
     const isSelected = selectedProducts.some(
-      (p) => p.name === name && p.brand === brand
+      (p) => p.name === product.name && p.brand === product.brand
     );
     if (isSelected) {
       card.style.border = "2px solid #000";
@@ -447,11 +494,11 @@ function scrollChatToBottom() {
 }
 
 // This code runs after the page loads
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   // Select the image element by its id
-  const serumImg = document.getElementById('revitalift-serum-img');
+  const serumImg = document.getElementById("revitalift-serum-img");
   // If the element exists, set its src to the correct image file
   if (serumImg) {
-    serumImg.src = 'img/Revitalift 1.5% Hyaluronic Acid Serum.png';
+    serumImg.src = "img/Revitalift 1.5% Hyaluronic Acid Serum.png";
   }
 });
