@@ -416,7 +416,8 @@ generateRoutineBtn.addEventListener("click", async () => {
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const userInput = document.getElementById("userInput").value;
+  const userInputElem = document.getElementById("userInput");
+  const userInput = userInputElem.value;
 
   conversationHistory.push({
     role: "user",
@@ -428,6 +429,9 @@ chatForm.addEventListener("submit", async (e) => {
     <div class="chat-bubble typing elise-typing"><em>Elise is typing...</em></div>
   `;
   chatWindow.scrollTop = chatWindow.scrollHeight;
+
+  // Clear the input field after submitting the question
+  userInputElem.value = "";
 
   try {
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -450,8 +454,6 @@ chatForm.addEventListener("submit", async (e) => {
     if (typingDiv) typingDiv.remove();
     chatWindow.innerHTML += `<div class="chat-bubble elise" style="margin-bottom: 16px;"><em>Sorry, something went wrong.</em></div>`;
   }
-
-  document.getElementById("userInput").value = "";
 });
 
 // New function to add chat bubbles
