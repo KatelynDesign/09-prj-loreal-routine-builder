@@ -113,7 +113,7 @@
       "brand": "Vichy",
       "name": "Minéral 89 Hyaluronic Acid Booster",
       "category": "serum",
-      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Vichy_Minéral_89_Hyaluronic_Acid_Booster.png",
+      "image": "img/Minéral 89 Hyaluronic Acid Booster.png",
       "description": "Lightweight gel booster with 89% volcanic mineral water and hyaluronic acid. Strengthens the barrier, provides plumping hydration with 15 minerals. Quick-absorbing, non-sticky; alcohol- and fragrance-free. Leaves skin fresh, soothed, and deeply hydrated.",
       "url": "https://www.vichyusa.com/skin-care/mineral-89-hyaluronic-acid-serum-3337875543248.html"
     },
@@ -131,7 +131,7 @@
       "brand": "L'Oréal Paris",
       "name": "Revitalift 1.5% Hyaluronic Acid Serum",
       "category": "serum",
-      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Loreal_Paris_Revitalift_1.5%_Hyaluronic_Acid_Serum.png",
+      "image": "img/revitalift.png",
       "description": "Lightweight serum with 1.5% hyaluronic acid (macro and micro) and vitamin C for multi-depth hydration. Instantly replenishes moisture, visibly plumps, and reduces fine lines. Fragrance-free, non-tacky; skin feels smoother and more youthful over time. Suitable for sensitive skin.",
       "url": "https://www.lorealparisusa.com/skin-care/face-serums/revitalift-derm-intensives-pure-hyaluronic-acid-serum"
     },
