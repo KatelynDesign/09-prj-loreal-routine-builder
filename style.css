@@ -40,20 +40,41 @@ body {
 .search-section {
   margin: 30px 0;
   display: flex;
+  gap: 14px;
 }
 
-.search-section select {
-  width: 100%;
-  padding: 16px;
+.search-input {
+  flex: 3;
+  padding: 16px 18px;
+  font-size: 19px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  background: #fff;
+  font-weight: 500;
+  transition: border-color 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.category-select {
+  flex: 1.2;
+  min-width: 180px;
+  max-width: 260px;
+  padding: 16px 14px;
   font-size: 18px;
   border: 2px solid #000;
   border-radius: 8px;
-  cursor: pointer;
-  background-color: white;
+  background: #fafafa;
   font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s;
 }
 
-.search-section select:focus {
+.category-select:focus {
   outline: none;
   border-color: #666;
 }
@@ -230,6 +251,22 @@ body {
   min-height: 160px;
   position: relative; /* Needed for overlay positioning */
   overflow: visible;
+  transition: min-height 0.25s, box-shadow 0.2s, border-color 0.2s;
+}
+
+/* Only expand the hovered/focused card */
+.product-card:hover,
+.product-card:focus-within {
+  min-height: 260px;
+  z-index: 2;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-color: #a0c4ff;
+}
+
+/* Ensure other cards stay at normal height */
+.products-grid .product-card:not(:hover):not(:focus-within) {
+  min-height: 160px;
+  z-index: 1;
 }
 
 .product-card img {
@@ -257,7 +294,7 @@ body {
   color: #666;
 }
 
-/* Overlay for product description (hidden by default) */
+/* Overlay for product description (black, white text, slightly translucent) */
 .product-card .product-desc {
   display: none;
   position: absolute;
@@ -265,17 +302,21 @@ body {
   top: 0;
   width: 100%;
   min-height: 100%;
-  background: rgba(255, 255, 255, 0.97);
-  border: 2px solid #e0eaff;
+  background: rgba(0, 0, 0, 0.78); /* slightly darker for better readability */
   border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   padding: 18px 16px;
   z-index: 10;
   font-size: 15px;
-  color: #222;
+  color: #fff; /* white text */
   line-height: 1.6;
   transition: opacity 0.2s;
   pointer-events: none;
+  border: 2px solid #e0eaff;
+  max-height: none;
+  box-sizing: border-box;
+  overflow: visible;
+  white-space: normal;
 }
 
 /* Show overlay on hover/focus of card */
@@ -283,13 +324,6 @@ body {
 .product-card:focus-within .product-desc {
   display: block;
   pointer-events: auto;
-}
-
-/* Optional: visually indicate hover */
-.product-card:hover,
-.product-card:focus-within {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  border-color: #a0c4ff;
 }
 
 /* selected products */

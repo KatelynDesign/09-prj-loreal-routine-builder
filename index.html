@@ -25,7 +25,14 @@
 
       <!-- Category Filter -->
       <div class="search-section">
-        <select id="categoryFilter">
+        <input
+          type="text"
+          id="productSearch"
+          placeholder="Search products by name or keyword..."
+          class="search-input"
+        />
+
+        <select id="categoryFilter" class="category-select">
           <option value="" selected disabled hidden>Choose a Category</option>
           <option value="cleanser">Cleansers</option>
           <option value="moisturizer">Moisturizers & Treatments</option>
@@ -44,20 +51,6 @@
           <option value="suncare">Suncare</option>
           <option value="fragrance">Fragrance</option>
         </select>
-
-        <input
-          type="text"
-          id="productSearch"
-          placeholder="Search products by name or keyword..."
-          style="
-            flex: 2;
-            margin-left: 10px;
-            padding: 16px;
-            font-size: 18px;
-            border: 2px solid #000;
-            border-radius: 8px;
-          "
-        />
       </div>
 
       <!-- Products Grid -->
